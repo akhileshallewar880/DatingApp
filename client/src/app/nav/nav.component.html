@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">Dating App</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="accountService.currentUser$ | async">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Matches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Messages</a>
+          </li>
+        </ul>
+
+        <div ngbDropdown class="d-inline-block" *ngIf="accountService.currentUser$ | async">
+          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+            Username
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem>Edit Profile</button>
+            <button ngbDropdownItem>Setting</button>
+            <button ngbDropdownItem (click)="logout()">Logout</button>
+          </div>
+        </div>
+        <form *ngIf="!(accountService.currentUser$ | async)" class="d-flex" (ngSubmit)="login()" #loginForm="ngForm">
+            <input 
+                name="username"
+                [(ngModel)]="loginModel.username"
+                class="form-control me-2" 
+                type="text" 
+                placeholder="Username" 
+                aria-label="Username">
+          
+            <input 
+                name="password"
+                [(ngModel)]="loginModel.password"
+                class="form-control me-2" 
+                type="password" 
+                placeholder="Password" 
+                aria-label="Password">
+
+          <button class="btn btn-outline-success" type="submit">Login</button>
+        </form>
+
+      </div>
+  </nav>
