@@ -4,8 +4,8 @@ public class ApiException
 {
     public ApiException(int statusCode, string message, string details) {
         StatusCode = statusCode;
-        message = message;
-        details = details;
+        Message = message;
+        Details = details;
     }
 
     public int StatusCode { get; set; }

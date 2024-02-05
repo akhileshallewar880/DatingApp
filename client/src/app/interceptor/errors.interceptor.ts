@@ -32,7 +32,7 @@ export class ErrorsInterceptor implements HttpInterceptor {
               } else {
                 this.tostr.error(error.error, error.status.toString());
               }
-              break;
+              break
 
               case 401 : 
                 this.tostr.error("Unauthorized", error.status.toString());

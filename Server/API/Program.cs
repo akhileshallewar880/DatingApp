@@ -1,5 +1,7 @@
 using System.Text;
 using API;
+using API.Data;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -21,8 +23,11 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 builder.Services.AddCors();
 
-// ItokenService injection
+// ItokenService injection, IUserRepository injection
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -58,5 +63,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var Services = scope.ServiceProvider;
+
+try
+{
+    var context = Services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);
+}
+catch (Exception ex)
+{
+    var logger = Services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during data migration");
+}
 
 app.Run();
