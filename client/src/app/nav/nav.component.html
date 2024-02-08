@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning mb-4">
     <div class="container">
       <a class="navbar-brand" routerLink="/" routerLinkActive="active">Dating App</a>
 
@@ -18,9 +18,9 @@
           </li>
         </ul>
 
-        <div ngbDropdown class="d-inline-block" *ngIf="accountService.currentUser$ | async">
-          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-            Username
+        <div ngbDropdown class="d-inline-block" *ngIf="(accountService.currentUser$ | async) as user ">
+          <button type="button" class="btn btn-outline-primary border-0" id="dropdownBasic1" ngbDropdownToggle>
+            {{"Hi " + user.username}}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
             <button ngbDropdownItem>Edit Profile</button>
