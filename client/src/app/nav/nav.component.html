@@ -23,7 +23,7 @@
             {{"Hi " + user.username}}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button ngbDropdownItem>Edit Profile</button>
+            <button ngbDropdownItem routerLink="/member/edit">Edit Profile</button>
             <button ngbDropdownItem>Setting</button>
             <button ngbDropdownItem (click)="logout()">Logout</button>
           </div>
