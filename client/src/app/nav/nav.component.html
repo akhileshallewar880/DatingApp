@@ -19,6 +19,7 @@
         </ul>
 
         <div ngbDropdown class="d-inline-block" *ngIf="(accountService.currentUser$ | async) as user ">
+          <img class="rounded-circle" src="{{user.photoUrl || '/assets/user.png'}}" alt="user photo">
           <button type="button" class="btn btn-outline-primary border-0" id="dropdownBasic1" ngbDropdownToggle>
             {{"Hi " + user.username}}
           </button>

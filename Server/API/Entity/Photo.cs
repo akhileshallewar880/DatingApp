@@ -15,10 +15,11 @@ namespace API.Entity
 
         public bool IsMain { get; set; }
 
-        public int PublicId { get; set; }
+        public string PublicId { get; set; }
 
         public int AppUserId { get; set; }
 
         public AppUser AppUser { get; set; }
+
     }
 }
