@@ -36,11 +36,13 @@ namespace API.Data
                    .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<MemberDTO>> GetMembersAsync()
+        public async Task<PagedList<MemberDTO>> GetMembersAsync(UserParams userParams)
         {
-            return await context1.Users
+            var query = context1.Users
                    .ProjectTo<MemberDTO>(mapper1.ConfigurationProvider)
-                   .ToListAsync();
+                   .AsNoTracking();
+
+            return await PagedList<MemberDTO>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
