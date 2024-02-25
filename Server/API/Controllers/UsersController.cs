@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using API.DTO;
 using API.Entity;
+using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -57,8 +58,9 @@ public class  UsersController : BaseApiController
     [HttpPut]
     public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
     {
-        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var user = await userRepository1.GetUserByUsernameAsync(username);
+        var userId = User.GetUserId();
+
+        var user = await userRepository1.GetUserByIdAsync(userId);
 
         if(user == null) return NotFound();
 
@@ -73,9 +75,9 @@ public class  UsersController : BaseApiController
     [HttpPost("add-photo")]
     public async Task<ActionResult<PhotoDTO>> AddPhoto(IFormFile file)
     {
-        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = User.GetUserId();
 
-        var user = await userRepository1.GetUserByUsernameAsync(username);
+        var user = await userRepository1.GetUserByIdAsync(userId);
 
         if(user == null) return NotFound();
 
