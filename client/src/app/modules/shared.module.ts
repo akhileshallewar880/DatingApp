@@ -5,7 +5,10 @@ import { TabsModule } from 'ngx-bootstrap/tabs'
 import { NgxSpinner, NgxSpinnerModule } from 'ngx-spinner';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { TimeagoModule } from "ngx-timeago";
 
 @NgModule({
   declarations: [],
@@ -19,7 +22,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
       type : 'line-scale-party'
     }),
     FileUploadModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    PaginationModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonsModule.forRoot(),
+    TimeagoModule.forRoot()
   ],
 
   exports : [
@@ -27,7 +35,10 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     TabsModule,
     NgxSpinnerModule,
     FileUploadModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    PaginationModule,
+    ButtonsModule,
+    TimeagoModule
   ]
 })
 export class SharedModule { }

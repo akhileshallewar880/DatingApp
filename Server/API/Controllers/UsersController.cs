@@ -25,10 +25,21 @@ public class  UsersController : BaseApiController
 
         photoService1 = photoService;
     }
-    [AllowAnonymous]
+    
     [HttpGet]  // api/users
     public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery] UserParams userParams)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        var currentUser = await userRepository1.GetUserByIdAsync(int.Parse(userId));
+
+        userParams.CurrentUsername = currentUser.UserName;
+
+        if(string.IsNullOrEmpty(userParams.Gender))
+        {
+            userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+        }
+
         var users = await userRepository1.GetMembersAsync(userParams);
 
         Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
