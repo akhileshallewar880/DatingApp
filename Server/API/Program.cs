@@ -1,9 +1,12 @@
 using System.Text;
 using API;
 using API.Data;
+using API.Entity;
 using API.Helpers;
 using API.Interfaces;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -33,7 +36,18 @@ builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<LogUserActivity>();
 builder.Services.AddScoped<ILikesRepository, LikesRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddIdentityCore<AppUser>(opt => 
+{
+    opt.Password.RequireNonAlphanumeric = false;
+}).AddRoles<AppRole>()
+  .AddRoleManager<RoleManager<AppRole>>()
+  .AddEntityFrameworkStores<DataContext>();
 
+builder.Services.AddAuthorization(opt => 
+{
+    opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+    opt.AddPolicy("RequirePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options => {
@@ -77,8 +91,10 @@ var Services = scope.ServiceProvider;
 try
 {
     var context = Services.GetRequiredService<DataContext>();
+    var userManager = Services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = Services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {
